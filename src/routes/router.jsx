@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router";
 import Root from "../layouts/Root";
 import Home from "../pages/home/home/Home";
 import Coverage from "../pages/coverage/Coverage";
+import NotFound from "../pages/notFound/NotFound";
 
 const router = createBrowserRouter([
     {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
                 path: '/coverage',
                 loader: ()=> fetch('/warehouses.json'),
                 Component: Coverage
+            },
+            {
+                path: "*",
+                Component: NotFound
             }
         ]
     }

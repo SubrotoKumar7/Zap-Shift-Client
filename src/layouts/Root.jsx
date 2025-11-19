@@ -5,7 +5,7 @@ import Navbar from '../pages/shared/navbar/Navbar';
 
 const Root = () => {
     return (
-        <div className='bg-base-300'>
+        <div className='bg-base-300 flex flex-col justify-between min-h-screen'>
             <Navbar></Navbar>
             <Outlet></Outlet>
             <Footer></Footer>

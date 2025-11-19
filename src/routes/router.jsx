@@ -3,6 +3,7 @@ import Root from "../layouts/Root";
 import Home from "../pages/home/home/Home";
 import Coverage from "../pages/coverage/Coverage";
 import NotFound from "../pages/notFound/NotFound";
+import About from "../pages/about/About";
 
 const router = createBrowserRouter([
     {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
             {
                 path: "*",
                 Component: NotFound
+            },
+            {
+                path: 'about-us',
+                Component: About
             }
         ]
     }

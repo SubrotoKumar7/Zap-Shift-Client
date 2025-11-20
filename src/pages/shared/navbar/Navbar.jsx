@@ -18,8 +18,7 @@ const Navbar = () => {
 
     const handleLogout = () => {
         logoutUser()
-        .then(res => {
-            console.log(res);
+        .then(() => {
             toast.success("Logout successful");
         })
         .catch(err => {
@@ -41,7 +40,7 @@ const Navbar = () => {
                             {links}
                         </ul>
                         </div>
-                        <Link to={'/'}><Logo></Logo></Link>
+                        <Logo></Logo>
                     </div>
                     <div className="navbar-center hidden lg:flex">
                         <ul className="menu menu-horizontal px-1">

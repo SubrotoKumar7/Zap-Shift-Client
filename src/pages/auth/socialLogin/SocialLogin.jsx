@@ -2,10 +2,13 @@ import React from 'react';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import useAuth from '../../../hooks/useAuth';
+import { useLocation, useNavigate } from 'react-router';
 
 const SocialLogin = () => {
     
     const {loginWithGoogle} = useAuth();
+    const location = useLocation();
+    const navigate = useNavigate();
 
         const googleLogin = () => {
         loginWithGoogle()
@@ -18,6 +21,7 @@ const SocialLogin = () => {
                 showConfirmButton: false,
                 timer: 1500
                 });
+                navigate(location.state || '/');
             }
         })
         .catch(err => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import useAuth from '../../../hooks/useAuth';
 import SocialLogin from '../socialLogin/SocialLogin';
 import { useForm } from 'react-hook-form';
@@ -9,6 +9,8 @@ import toast from 'react-hot-toast';
 const Login = () => {
     const {loginUser} = useAuth();
     const {register, handleSubmit, formState: {errors}} = useForm();
+    const location = useLocation();
+    const navigate = useNavigate();
 
     const handleLogin = (data) => {
         loginUser(data.email, data.password)
@@ -21,6 +23,7 @@ const Login = () => {
                 showConfirmButton: false,
                 timer: 1500
                 });
+                navigate(location.state || '/');
             }
         })
         .catch(err => {
@@ -52,7 +55,7 @@ const Login = () => {
                     <button className="btn btn-primary text-black font-bold mt-4">Login</button>
                     </fieldset>
                 </form>
-                <div className='my-2'>Don’t have any account? <Link className='text-secondary font-semibold underline' to={'/register'}>Register</Link></div>
+                <div className='my-2'>Don’t have any account? <Link state={location.state} className='text-secondary font-semibold underline' to={'/register'}>Register</Link></div>
                 <p className='text-center my-2'>OR</p>
                 <SocialLogin></SocialLogin>
             </div>

@@ -1,26 +1,62 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../../hooks/useAuth';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
 import SocialLogin from '../socialLogin/SocialLogin';
+import axios from 'axios';
 
 const Register = () => {
     const {register, handleSubmit, formState: {errors}} = useForm();
-    const {createUser} = useAuth();
+    const {createUser, updateUser} = useAuth();
+    const navigate = useNavigate();
 
     const handleRegister = (data) => {
+        
+        const profileImg = data.image[0];
+
         createUser(data.email, data.password)
         .then(res => {
             if(res.user){
-                Swal.fire({
-                position: "top",
-                icon: "success",
-                title: "Your account create successful",
-                showConfirmButton: false,
-                timer: 1500
-                });
+                // 1st store the image in form data
+                const formData = new FormData();
+                formData.append('image', profileImg);
+
+                // 2nd send the photo to image host
+                const imgAPIURL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host_key}`;
+
+                axios.post(imgAPIURL, formData)
+                .then(res=> {
+                    const imageUrl = res.data.data.url;
+
+                    // 3rd save to photo url in object
+                    const userInfo = {
+                        photoURL: imageUrl,
+                        displayName: data.name
+                    }
+
+                    // 4th update firebase user
+                    updateUser(userInfo)
+                    .then(()=> {
+                        Swal.fire({
+                        position: "top",
+                        icon: "success",
+                        title: "Your account create successful",
+                        showConfirmButton: false,
+                        timer: 1500
+                        });
+                        navigate('/');
+                    })
+                    .catch(err => {
+                        toast.error(err.message);
+                    })
+                })
+                .catch(err=> {
+                    toast.error(err.message);
+                })
+
+                
             }
         })
         .catch(err => {
@@ -38,9 +74,15 @@ const Register = () => {
             <div>
                 <form onSubmit={handleSubmit(handleRegister)}>
                     <fieldset className="fieldset">
+                    {/* name */}
                     <label className="label">Name</label>
                     <input type="text" {...register('name', {required: true})} className="input w-full" placeholder="Name" />
                     {errors.name?.type === 'required' && <p className='text-red-500'>Name is required</p>}
+
+                    {/* photo */}
+                    <label className="label">Image</label>
+                    <input type="file" {...register('image', {required: true})} className="file-input w-full" placeholder="Name" />
+                    {errors.image?.type === 'required' && <p className='text-red-500'>Image is required</p>}
 
                     {/* email */}
                     <label className="label">Email</label>

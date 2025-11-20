@@ -7,6 +7,8 @@ import About from "../pages/about/About";
 import AuthLayout from "../layouts/AuthLayout";
 import Login from "../pages/auth/login/Login";
 import Register from "../pages/auth/register/Register";
+import Loader from "../components/loader/Loader";
+import Private from "../private/Private";
 
 const router = createBrowserRouter([
     {
@@ -20,6 +22,7 @@ const router = createBrowserRouter([
             {
                 path: '/coverage',
                 loader: ()=> fetch('/warehouses.json'),
+                hydrateFallbackElement: <Loader></Loader>,
                 Component: Coverage
             },
             {

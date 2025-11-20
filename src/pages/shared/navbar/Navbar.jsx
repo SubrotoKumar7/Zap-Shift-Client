@@ -55,7 +55,7 @@ const Navbar = () => {
                             <Link className='btn btn-outline' to={'/login'}>Login</Link>
                         }
                         <div>
-                            <button className='btn btn-primary font-bold text-black'>Be a rider</button>
+                            <Link to={'/rider'} className='btn btn-primary font-bold text-black'>Be a rider</Link>
                         </div>
                     </div>
                 </div>

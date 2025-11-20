@@ -9,6 +9,7 @@ import Login from "../pages/auth/login/Login";
 import Register from "../pages/auth/register/Register";
 import Loader from "../components/loader/Loader";
 import Private from "../private/Private";
+import Rider from "../pages/rider/Rider";
 
 const router = createBrowserRouter([
     {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
             {
                 path: 'about-us',
                 Component: About
+            },
+            {
+                path: 'rider',
+                element: <Private><Rider></Rider></Private>
             }
         ]
     },

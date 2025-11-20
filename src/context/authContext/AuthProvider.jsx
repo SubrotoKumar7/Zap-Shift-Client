@@ -22,7 +22,7 @@ const AuthProvider = ({children}) => {
 
     const logoutUser = () => {
         setLoading(true);
-        return signOut();
+        return signOut(auth);
     }
 
     const loginWithGoogle = () => {

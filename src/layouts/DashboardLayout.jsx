@@ -17,7 +17,9 @@ const DashboardLayout = () => {
                         <div className="px-4 font-medium">Zap Shift Dashboard</div>
                     </nav>
                     {/* Page content here */}
-                    <Outlet></Outlet>
+                    <div className='w-11/12 mx-auto py-10'>
+                        <Outlet></Outlet>
+                    </div>
                 </div>
 
                 <div className="drawer-side is-drawer-close:overflow-visible">

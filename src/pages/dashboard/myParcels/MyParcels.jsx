@@ -15,7 +15,36 @@ const MyParcels = () => {
     })
     return (
         <div>
-            <h1>My All Parcels here {parcels.length}</h1>
+            <h1 className='text-2xl font-extrabold pb-5'>My All Parcels ({parcels.length})</h1>
+            <div>
+                <div className="overflow-x-auto">
+                    <table className="table table-zebra">
+                        <thead>
+                            <tr>
+                                <th>SL.</th>
+                                <th>Name</th>
+                                <th>Parcel Type</th>
+                                <th>Cost</th>
+                                <th>Payment Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {
+                            parcels.map((parcel, i) =>
+                            <tr key={parcel._id}>
+                                <th>{i + 1}</th>
+                                <td>{parcel.parcelName}</td>
+                                <td>{parcel.parcelType}</td>
+                                <td>{parcel.cost}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>)
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     );
 };

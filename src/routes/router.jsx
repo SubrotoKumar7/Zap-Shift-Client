@@ -41,6 +41,8 @@ const router = createBrowserRouter([
             },
             {
                 path: 'send-parcel',
+                loader: ()=> fetch('/warehouses.json'),
+                hydrateFallbackElement: <Loader></Loader>,
                 element: <Private><SendParcel></SendParcel></Private>
             }
         ]

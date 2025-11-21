@@ -1,9 +1,25 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
+import { useLoaderData } from 'react-router';
 
 const SendParcel = () => {
 
-    const {register, handleSubmit, } = useForm();
+    const {register, handleSubmit, control } = useForm();
+    const warehouseData = useLoaderData();
+    
+    const regionDuplicate = warehouseData.map(r => r.region);
+    const region = [...new Set(regionDuplicate)];
+
+    const districtByRegion = region => {
+        const regionDistricts = warehouseData.filter(d => d.region === region);
+        const districts = regionDistricts.map(d => d.district);
+        return districts;
+    }
+
+    const senderRegion = useWatch({control, name: 'senderRegion'});
+    const receiverRegion = useWatch({control, name: 'receiverRegion'})
+    
+
 
     const handleParcel = (data) => {
         console.log('after submitting data', data);
@@ -50,8 +66,22 @@ const SendParcel = () => {
                                     <label className="label font-semibold">Sender Phone No</label>
                                     <input type="number" {...register("senderPhone", {required: true})} className="input w-full" placeholder="Sender Phone No" />
 
+                                    <label className="label font-semibold">Sender Region</label>
+                                    <select {...register("senderRegion", {required: true})} defaultValue="Pick a region" className="select w-full">
+                                        <option disabled={true}>Pick a region</option>
+                                        {
+                                            region.map((r,i) => <option key={i} value={r}>{r}</option>)
+                                        }
+                                    </select>
+
                                     <label className="label font-semibold">Sender District</label>
-                                    <input type="text" {...register("senderDistrict", {required: true})} className="input w-full" placeholder="Sender District" />
+                                    <select {...register("senderDistrict", {required: true})} defaultValue="Pick a district" className="select w-full">
+                                        <option disabled={true}>Pick a district</option>
+                                        {
+                                            districtByRegion(senderRegion).map((r,i) => <option key={i} value={r}>{r}</option>)
+                                        }
+                                    </select>
+
 
                                     <label className="label font-semibold">Pickup Instruction</label>
                                     <textarea className="textarea h-24 w-full" {...register("pickupInstruction", {required: true})} placeholder="Pickup Instruction"></textarea>
@@ -71,8 +101,21 @@ const SendParcel = () => {
                                     <label className="label font-semibold">Receiver Phone No</label>
                                     <input type="number" {...register("receiverPhone", {required: true})} className="input w-full" placeholder="Receiver Phone No" />
 
+                                    <label className="label font-semibold">Receiver Region</label>
+                                    <select {...register("receiverRegion", {required: true})} defaultValue="Pick a region" className="select w-full">
+                                        <option disabled={true}>Pick a region</option>
+                                        {
+                                            region.map((r,i) => <option key={i} value={r}>{r}</option>)
+                                        }
+                                    </select>
+
                                     <label className="label font-semibold">Receiver District</label>
-                                    <input type="text" {...register("receiverDistrict", {required: true})} className="input w-full" placeholder="Receiver District" />
+                                    <select {...register("receiverDistrict", {required: true})} defaultValue="Pick a district" className="select w-full">
+                                        <option disabled={true}>Pick a district</option>
+                                        {
+                                            districtByRegion(receiverRegion).map((r,i) => <option key={i} value={r}>{r}</option>) 
+                                        }
+                                    </select>
 
                                     <label className="label font-semibold">Delivery Instruction</label>
                                     <textarea className="textarea h-24 w-full" {...register("deliveryInstruction", {required: true})} placeholder="Delivery Instruction"></textarea>

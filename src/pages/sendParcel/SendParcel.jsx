@@ -1,11 +1,16 @@
 import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useLoaderData } from 'react-router';
+import Swal from 'sweetalert2';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
+import useAuth from '../../hooks/useAuth';
 
 const SendParcel = () => {
 
+    const axiosSecure = useAxiosSecure();
     const {register, handleSubmit, control } = useForm();
     const warehouseData = useLoaderData();
+    const {user} = useAuth();
     
     const regionDuplicate = warehouseData.map(r => r.region);
     const region = [...new Set(regionDuplicate)];
@@ -22,8 +27,54 @@ const SendParcel = () => {
 
 
     const handleParcel = (data) => {
-        console.log('after submitting data', data);
+        // console.log('after submitting data', data);
+        const isDocument = data.parcelType === 'document';
+        const isSameDistrict = data.senderDistrict === data.receiverDistrict;
+        const parcelWeight = parseFloat(data.parcelWeight);
+        let cost = 0;
+
+        if(isDocument){
+            cost = isSameDistrict ? 60 : 80;
+        }
+        else{
+            if(parcelWeight <= 3){
+                cost = isSameDistrict ? 110 : 150;
+            }
+            else{
+                const minCharge = isSameDistrict ? 110 : 150;
+                const extraWeight = parcelWeight - 3;
+                const extraCharge = isSameDistrict ? extraWeight * 40 : extraWeight * 40 + 40; 
+                cost = minCharge + extraCharge;
+            }
+        }
+        
+        Swal.fire({
+        title: "Agree with the cost?",
+        text: `You have to pay ${cost} taka`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes"
+        }).then((result) => {
+        if (result.isConfirmed) {
+            // save parcel info to database
+            axiosSecure.post('/parcels', data)
+            .then(res=> {
+                console.log('after save parcel', res.data);
+                Swal.fire({
+                title: "Your Parcel Accept",
+                text: "We collect your parcel very soon.",
+                icon: "success"
+                });
+            })
+
+            
+        }
+        });
+
     }
+
 
     return (
         <div className='w-11/12 mx-auto bg-white p-10 mb-10 rounded-2xl'>
@@ -34,11 +85,11 @@ const SendParcel = () => {
                     <form onSubmit={handleSubmit(handleParcel)}>
                         <div className='flex gap-5'>
                             <label className="label">
-                                <input type="radio" value={'document'} {...register('documentType')} className="radio radio-secondary radio-sm" defaultChecked />
+                                <input type="radio" value={'document'} {...register('parcelType')} className="radio radio-secondary radio-sm" defaultChecked />
                                 Document
                             </label>
                             <label className="label">
-                                <input type="radio" value={'non-document'} {...register('documentType')} className="radio radio-secondary radio-sm" />
+                                <input type="radio" value={'non-document'} {...register('parcelType')} className="radio radio-secondary radio-sm" />
                                 Not-Document
                             </label>
                         </div>
@@ -49,7 +100,7 @@ const SendParcel = () => {
                             </div>
                             <div className='flex-1'>
                                 <label className="label font-semibold">Parcel Weight (KG)</label>
-                                <input type="number" {...register("weight", {required: true})} className="input w-full" placeholder="Parcel Weight (KG)" />
+                                <input type="number" {...register("parcelWeight", {required: true})} className="input w-full" placeholder="Parcel Weight (KG)" />
                             </div>
                         </div>
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-5 mt-10'>
@@ -58,7 +109,10 @@ const SendParcel = () => {
                                 <h1 className='font-extrabold my-2'>Sender Details</h1>
                                 <fieldset className="fieldset">
                                     <label className="label font-semibold">Sender Name</label>
-                                    <input type="text" {...register("senderName", {required: true})} className="input w-full" placeholder="Sender Name" />
+                                    <input type="text" {...register("senderName", {required: true})} defaultValue={user?.displayName} className="input w-full" placeholder="Sender Name" />
+
+                                    <label className="label font-semibold">Sender Email</label>
+                                    <input type="email" {...register("senderEmail", {required: true})} defaultValue={user?.email} className="input w-full" placeholder="Sender Email" />
 
                                     <label className="label font-semibold">Sender Address</label>
                                     <input type="text" {...register("senderAddress", {required: true})} className="input w-full" placeholder="Sender Address" />
@@ -94,6 +148,9 @@ const SendParcel = () => {
                                 <fieldset className="fieldset">
                                     <label className="label font-semibold">Receiver Name</label>
                                     <input type="text" {...register("receiverName", {required: true})} className="input w-full" placeholder="Receiver Name" />
+
+                                    <label className="label font-semibold">Receiver Email</label>
+                                    <input type="email" {...register("receiverEmail", {required: true})} className="input w-full" placeholder="Receiver Email" />
 
                                     <label className="label font-semibold">Receiver Address</label>
                                     <input type="text" {...register("receiverAddress", {required: true})} className="input w-full" placeholder="Receiver Address" />

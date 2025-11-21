@@ -14,6 +14,12 @@ const Navbar = () => {
         <li><NavLink to={'/'}>Pricing</NavLink></li>
         <li><NavLink to={'/send-parcel'}>Send Parcel</NavLink></li>
         <li><NavLink to={'/'}>Contact</NavLink></li>
+        <>
+            {
+                user && 
+                <li><NavLink to={'/dashboard/my-parcels'}>My Parcels</NavLink></li>
+            }
+        </>
     </>
 
     const handleLogout = () => {

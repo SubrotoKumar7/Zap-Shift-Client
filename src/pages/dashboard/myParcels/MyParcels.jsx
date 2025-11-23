@@ -5,6 +5,7 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { FiEdit } from "react-icons/fi";
 import { FaMagnifyingGlass, FaRegTrashCan } from "react-icons/fa6";
 import Swal from 'sweetalert2';
+import { Link } from 'react-router';
 
 const MyParcels = () => {
     const {user} = useAuth();
@@ -46,6 +47,19 @@ const MyParcels = () => {
         });
     }
 
+    const handlePayment = async(parcel) => {
+        const info = {
+            cost: parcel.cost,
+            parcelId: parcel._id,
+            senderEmail: parcel.senderEmail,
+            parcelName: parcel.parcelName
+        }
+
+        const res = await axiosSecure.post(`/payment-checkout-session`, info);
+        console.log(res.data.url);
+        window.location.assign(res.data.url);
+    }
+
     return (
         <div>
             <h1 className='text-2xl font-extrabold pb-5'>My All Parcels ({parcels.length})</h1>
@@ -59,6 +73,7 @@ const MyParcels = () => {
                                 <th>Parcel Type</th>
                                 <th>Cost</th>
                                 <th>Payment Status</th>
+                                <th>Delivery Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -70,7 +85,16 @@ const MyParcels = () => {
                                 <td>{parcel.parcelName}</td>
                                 <td>{parcel.parcelType}</td>
                                 <td>{parcel.cost}</td>
-                                <td></td>
+                                <td>
+                                    {
+                                        parcel.paymentStatus === 'paid' ?
+                                        <span className='text-green-500 font-bold'>Paid</span>
+                                        :
+                                        <button onClick={()=> handlePayment(parcel)} className='btn btn-sm btn-primary text-black'>Pay</button>
+
+                                    }
+                                </td>
+                                <td>{parcel.deliveryStatus}</td>
                                 <td>
                                     <button className='btn btn-sm btn-square hover:bg-primary'>
                                         <FiEdit />

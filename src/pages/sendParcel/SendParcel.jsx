@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { useLoaderData } from 'react-router';
+import { useLoaderData, useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import useAuth from '../../hooks/useAuth';
@@ -11,6 +11,8 @@ const SendParcel = () => {
     const {register, handleSubmit, control } = useForm();
     const warehouseData = useLoaderData();
     const {user} = useAuth();
+    const navigate = useNavigate();
+
     
     const regionDuplicate = warehouseData.map(r => r.region);
     const region = [...new Set(regionDuplicate)];
@@ -27,7 +29,6 @@ const SendParcel = () => {
 
 
     const handleParcel = (data) => {
-        // console.log('after submitting data', data);
         const isDocument = data.parcelType === 'document';
         const isSameDistrict = data.senderDistrict === data.receiverDistrict;
         const parcelWeight = parseFloat(data.parcelWeight);
@@ -63,13 +64,15 @@ const SendParcel = () => {
         if (result.isConfirmed) {
             // save parcel info to database
             axiosSecure.post('/parcels', data)
-            .then(res=> {
-                console.log('after save parcel', res.data);
-                Swal.fire({
-                title: "Your Parcel Accept",
-                text: "We collect your parcel very soon.",
-                icon: "success"
-                });
+            .then((res)=> {
+                if(res.data.insertedId){
+                    Swal.fire({
+                        title: "Your Parcel has created",
+                    text: "Please, now pay for this parcel.",
+                    icon: "success"
+                    });
+                    navigate('/dashboard/my-parcels');
+                }
             })
 
             

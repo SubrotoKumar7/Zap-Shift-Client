@@ -27,6 +27,7 @@ const PaymentHistory = () => {
                                 <th>Transaction ID</th>
                                 <th>Amount</th>
                                 <th>Tracking Number</th>
+                                <th>Payment Time</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -39,6 +40,7 @@ const PaymentHistory = () => {
                                     <td>{payment.transactionId}</td>
                                     <td>{payment.amount}</td>
                                     <td>{payment.trackingId}</td>
+                                    <td>{payment.paidAt}</td>
                                     <td>
                                         <button className='btn btn-xs'>View</button>
                                     </td>

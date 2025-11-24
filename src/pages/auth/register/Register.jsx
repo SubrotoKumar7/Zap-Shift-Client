@@ -6,12 +6,14 @@ import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
 import SocialLogin from '../socialLogin/SocialLogin';
 import axios from 'axios';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const Register = () => {
     const {register, handleSubmit, formState: {errors}} = useForm();
     const {createUser, updateUser} = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+    const axiosSecure = useAxiosSecure();
 
     const handleRegister = (data) => {
         
@@ -30,6 +32,23 @@ const Register = () => {
                 axios.post(imgAPIURL, formData)
                 .then(res=> {
                     const imageUrl = res.data.data.url;
+
+                    // save user to db
+                    const userDB = {
+                        email: data.email,
+                        photoURL: imageUrl,
+                        displayName: data.name
+                    }
+                    axiosSecure.post('/users', userDB)
+                    .then(res => {
+                        if(res.data.insertedId){
+                            console.log(res.data);
+                        }
+                    })
+                    .catch(err=> {
+                        console.log(err.message);
+                    })
+
 
                     // 3rd save to photo url in object
                     const userInfo = {

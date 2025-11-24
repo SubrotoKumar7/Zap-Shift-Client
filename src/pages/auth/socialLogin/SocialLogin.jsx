@@ -3,25 +3,38 @@ import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import useAuth from '../../../hooks/useAuth';
 import { useLocation, useNavigate } from 'react-router';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const SocialLogin = () => {
     
     const {loginWithGoogle} = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
+    const axiosSecure = useAxiosSecure();
 
         const googleLogin = () => {
         loginWithGoogle()
         .then(res => {
             if(res.user){
-                Swal.fire({
-                position: "top",
-                icon: "success",
-                title: "Authenticate successful",
-                showConfirmButton: false,
-                timer: 1500
-                });
-                navigate(location.state || '/');
+                // save user to db
+                const userDB = {
+                    email: res.user.email,
+                    photoURL: res.user.photoURL,
+                    displayName: res.user.displayName,
+                }
+
+                axiosSecure.post('/users', userDB)
+                .then(() => {
+                    Swal.fire({
+                    position: "top",
+                    icon: "success",
+                    title: "Authenticate successful",
+                    showConfirmButton: false,
+                    timer: 1500
+                    });
+                    navigate(location.state || '/');
+                })
+
             }
         })
         .catch(err => {

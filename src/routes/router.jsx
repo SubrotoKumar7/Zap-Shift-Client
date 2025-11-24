@@ -43,6 +43,8 @@ const router = createBrowserRouter([
             },
             {
                 path: 'rider',
+                loader: ()=> fetch('/warehouses.json'),
+                hydrateFallbackElement: <Loader></Loader>,
                 element: <Private><Rider></Rider></Private>
             },
             {

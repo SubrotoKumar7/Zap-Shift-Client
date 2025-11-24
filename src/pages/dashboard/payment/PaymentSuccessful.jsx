@@ -12,7 +12,6 @@ const PaymentSuccessful = () => {
         if(sessionId){
             axiosSecure.patch(`/payment-success?session_id=${sessionId}`)
             .then(res => {
-                console.log(res.data);
                 setPaymentInfo({
                     trackingId: res.data.trackingId,
                     transactionId: res.data.transactionId

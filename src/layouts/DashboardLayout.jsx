@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaRegCreditCard } from 'react-icons/fa';
 import { LuBox } from 'react-icons/lu';
 import { Link, NavLink, Outlet } from 'react-router';
 
@@ -39,8 +40,15 @@ const DashboardLayout = () => {
                             {/* my items */}
                             <li>
                                 <NavLink to={'/dashboard/my-parcels'} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="My Parcels">
-                                <LuBox />
+                                <LuBox className="my-1.5 inline-block size-4" />
                                 <span className="is-drawer-close:hidden">My Parcels</span>
+                                </NavLink>
+                            </li>
+
+                            <li>
+                                <NavLink to={'/dashboard/payment-history'} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Payment History">
+                                <FaRegCreditCard className="my-1.5 inline-block size-4" />
+                                <span className="is-drawer-close:hidden">Payment History</span>
                                 </NavLink>
                             </li>
 

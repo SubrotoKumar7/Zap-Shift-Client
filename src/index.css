@@ -15,3 +15,7 @@
 *{
     font-family: "Urbanist", sans-serif;
 }
+
+.active{
+    @apply bg-primary;
+}

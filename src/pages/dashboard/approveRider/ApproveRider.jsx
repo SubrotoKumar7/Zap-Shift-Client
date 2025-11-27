@@ -48,14 +48,15 @@ const ApproveRider = () => {
                     <table className="table table-zebra">
                         <thead>
                             <tr>
-                                <th></th>
+                                <th>#</th>
                                 <th>Name</th>
                                 <th>Age</th>
                                 <th>Email</th>
                                 <th>Region</th>
                                 <th>District</th>
                                 <th>Applied Warehouse</th>
-                                <th>Status</th>
+                                <th>Application Status</th>
+                                <th>Work Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -71,6 +72,7 @@ const ApproveRider = () => {
                                     <td>{rider.district}</td>
                                     <td>{rider.warehouse}</td>
                                     <td>{rider.status}</td>
+                                    <td>{rider.workStatus}</td>
                                     <td>
                                         <button onClick={()=> handleApproval(rider)} title='accept' className="btn btn-xs bg-primary text-black"><FaUserCheck /></button>
                                         <button onClick={()=> handleRejection(rider)} title='reject' className="btn btn-xs mx-1 bg-secondary text-white"><IoPersonRemoveSharp /></button>

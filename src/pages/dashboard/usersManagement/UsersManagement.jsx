@@ -118,6 +118,7 @@ const UsersManagement = () => {
                                             <div className="mask mask-squircle h-12 w-12">
                                                 <img
                                                 src={user.photoURL}
+                                                referrerPolicy="no-referrer"
                                                 alt="user image" />
                                             </div>
                                             </div>

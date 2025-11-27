@@ -4,12 +4,13 @@ import { useForm, useWatch } from 'react-hook-form';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import { useLoaderData } from 'react-router';
 import Swal from 'sweetalert2';
+import useAuth from '../../hooks/useAuth';
 
 const Rider = () => {
     const axiosSecure = useAxiosSecure();
     const {register, handleSubmit, control } = useForm();
     const warehouseData = useLoaderData();
-
+    const {user} = useAuth();
 
     const regionDuplicate = warehouseData.map(r => r.region);
     const allRegion = [...new Set(regionDuplicate)];
@@ -54,7 +55,7 @@ const Rider = () => {
                             <div className='flex flex-col md:flex-row gap-2 py-2'>
                                 <div>
                                     <label className="label font-medium">Your Name</label>
-                                    <input type="text" {...register('riderName', {required: true})} className="input w-full" placeholder="Name" />
+                                    <input type="text" {...register('riderName', {required: true})} defaultValue={user?.displayName} className="input w-full" placeholder="Name" />
                                 </div>
                                 <div>
                                     <label className="label font-medium">Your Age</label>
@@ -64,7 +65,7 @@ const Rider = () => {
 
                             <div>
                                 <label className="label font-medium">Your Email</label>
-                                <input type="email" {...register('riderEmail', {required: true})} className="input w-full" placeholder="Email Address" />
+                                <input type="email" {...register('riderEmail', {required: true})} readOnly defaultValue={user?.email} className="input w-full" placeholder="Email Address" />
                             </div>
                             
 

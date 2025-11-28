@@ -24,6 +24,7 @@ import DashboardHome from "../pages/dashboard/dashboardHome/DashboardHome";
 import AssignRiders from "../pages/dashboard/assignRiders/AssignRiders";
 import AssignedParcels from "../pages/dashboard/assignedParcels/AssignedParcels";
 import RiderRoute from "../private/RiderRoute";
+import CompletedDelivery from "../pages/dashboard/completedDelivery/CompletedDelivery";
 
 const router = createBrowserRouter([
     {
@@ -104,6 +105,7 @@ const router = createBrowserRouter([
                 path: 'payment-history',
                 Component: PaymentHistory
             },
+            // admin routes
             {
                 path: 'approve-rider',
                 element: <AdminRoute><ApproveRider></ApproveRider></AdminRoute>
@@ -116,9 +118,14 @@ const router = createBrowserRouter([
                 path: 'assign-rider',
                 element: <AdminRoute><AssignRiders></AssignRiders></AdminRoute>
             },
+            // rider routes
             {
                 path: 'assigned-parcels',
                 element: <RiderRoute><AssignedParcels></AssignedParcels></RiderRoute>
+            },
+            {
+                path: 'completed-delivery',
+                element: <RiderRoute><CompletedDelivery></CompletedDelivery></RiderRoute>
             }
         ]
     }

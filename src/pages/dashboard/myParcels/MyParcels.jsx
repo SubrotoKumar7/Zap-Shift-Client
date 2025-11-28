@@ -5,7 +5,6 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { FiEdit } from "react-icons/fi";
 import { FaMagnifyingGlass, FaRegTrashCan } from "react-icons/fa6";
 import Swal from 'sweetalert2';
-import { Link } from 'react-router';
 
 const MyParcels = () => {
     const {user} = useAuth();
@@ -56,7 +55,6 @@ const MyParcels = () => {
         }
 
         const res = await axiosSecure.post(`/payment-checkout-session`, info);
-        console.log(res.data.url);
         window.location.assign(res.data.url);
     }
 

@@ -25,6 +25,7 @@ import AssignRiders from "../pages/dashboard/assignRiders/AssignRiders";
 import AssignedParcels from "../pages/dashboard/assignedParcels/AssignedParcels";
 import RiderRoute from "../private/RiderRoute";
 import CompletedDelivery from "../pages/dashboard/completedDelivery/CompletedDelivery";
+import TrackingParcel from "../pages/trackingParcel/TrackingParcel";
 
 const router = createBrowserRouter([
     {
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
                 loader: ()=> fetch('/warehouses.json'),
                 hydrateFallbackElement: <Loader></Loader>,
                 element: <Private><SendParcel></SendParcel></Private>
+            },
+            {
+                path: 'parcel-tracking/:trackId',
+                Component: TrackingParcel
             }
         ]
     },
